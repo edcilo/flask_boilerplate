@@ -1,5 +1,5 @@
 from flask import Blueprint
-from ms import app
+from ms.controllers import WebController
 
 
 web = Blueprint('web', __name__, url_prefix="/")
@@ -7,6 +7,4 @@ web = Blueprint('web', __name__, url_prefix="/")
 
 @web.route("/")
 def index():
-    print(app.config.get("APP_VERSION"))
-    return "hello from flask"
-
+    return WebController.action('index')
