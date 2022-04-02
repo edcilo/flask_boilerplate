@@ -7,5 +7,6 @@ app = Flask(__name__)
 CORS(app)
 
 
+import ms.config
 import ms.commands
-import ms.urls
+import ms.routes
