@@ -10,3 +10,21 @@ services:
     - ./:/app
     environment:
     - FLASK_ENV=development
+    networks:
+    - flaskNet
+
+  psql_:
+    container_name: psql_
+    image: postgres
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_PASSWORD=secret
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=postgres
+    networks:
+    - flaskNet
+
+networks:
+  flaskNet:
+    driver: "bridge"

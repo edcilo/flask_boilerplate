@@ -1,5 +1,5 @@
 import os
-from fixture import app, client, runner
+from fixture import app, runner
 from ms.commands import pep8, makecontroller, makemiddleware
 
 
