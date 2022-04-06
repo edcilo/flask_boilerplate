@@ -26,7 +26,7 @@ configuration = {
 def db_connection(db_config):
     engine = db_config.get("default")
 
-    if not engine in db_config.get("connections", {}):
+    if engine not in db_config.get("connections", {}):
         raise Exception("The database engine does not exist")
 
     config = db_config.get("connections", {}).get(engine, {})

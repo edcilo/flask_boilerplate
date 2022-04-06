@@ -10,4 +10,5 @@ class Controller:
             action = getattr(cls(), method)
             return action(*args, *kwargs)
         except AttributeError:
-            raise BadMethodCallException(f"Method {cls.__name__}.{method} does not exist.")
+            raise BadMethodCallException(
+                f"Method {cls.__name__}.{method} does not exist.")
