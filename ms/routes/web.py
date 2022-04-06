@@ -1,8 +1,5 @@
-from flask import Blueprint
 from ms.controllers import WebController
-
-
-web = Blueprint('web', __name__, url_prefix="/")
+from .blueprints import web
 
 
 @web.route("/")
