@@ -8,7 +8,7 @@ from flask.cli import with_appcontext
                help='Create a new model class')
 @click.option('-n', '--name', required=True, help='The name of the class')
 @with_appcontext
-def makeModel(name):
+def makemodel(name):
     appPath = os.path.realpath('')
     modelsPath = 'ms/models'
     filename = f"{name[0].lower()}{name[1:]}"

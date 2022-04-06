@@ -1,13 +1,15 @@
 from ms import app
 from .autopep8 import pep8
 from .makeController import makecontroller
+from .makeForm import makeform
 from .makeMiddleware import makemiddleware
-from .makeModel import makeModel
-from .makeSeeder import makeSeeder
+from .makeModel import makemodel
+from .makeSeeder import makeseeder
 
 
 app.cli.add_command(pep8)
 app.cli.add_command(makecontroller)
+app.cli.add_command(makeform)
 app.cli.add_command(makemiddleware)
-app.cli.add_command(makeModel)
-app.cli.add_command(makeSeeder)
+app.cli.add_command(makemodel)
+app.cli.add_command(makeseeder)

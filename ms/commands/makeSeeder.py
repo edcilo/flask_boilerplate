@@ -8,11 +8,11 @@ from flask.cli import with_appcontext
                help='Create a new seeder class')
 @click.option('-n', '--name', required=True, help='The name of the seeder')
 @with_appcontext
-def makeSeeder(name):
+def makeseeder(name):
     appPath = os.path.realpath('')
-    modelsPath = 'ms/db/seeders'
+    seederPath = 'ms/db/seeders'
     filename = f"{name[0].lower()}{name[1:]}"
-    fullpath = os.path.join(appPath, modelsPath, f"{filename}.py")
+    fullpath = os.path.join(appPath, seederPath, f"{filename}.py")
 
     seeder = open(fullpath, 'w+')
     seeder.write(f'''from faker import Faker
