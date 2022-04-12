@@ -12,7 +12,7 @@ class Model(BaseModel):
             if attr in self._fillable:
                 setattr(self, attr, value)
 
-    def udpate(self, data):
+    def update(self, data):
         self.setAttrs(data)
 
 

@@ -12,7 +12,6 @@ def makecontroller(name):
     controllersPath = "ms/controllers"
     filename = f"{name[0].lower()}{name[1:]}"
     fullpath = os.path.join(appPath, controllersPath, f"{filename}.py")
-    initPath = os.path.join(appPath, controllersPath, "__init__.py")
 
     controller = open(fullpath, "w+")
     controller.write(f'''from flask import jsonify
@@ -26,7 +25,3 @@ class {name}(Controller):
         return jsonify(response), 200
 ''')
     controller.close()
-
-    # init = open(initPath, "a")
-    # init.write(f"from .{filename} import {name}\n")
-    # init.close()

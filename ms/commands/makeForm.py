@@ -12,7 +12,6 @@ def makeform(name):
     formsPath = "ms/forms"
     filename = f"{name[0].lower()}{name[1:]}"
     fullpath = os.path.join(appPath, formsPath, f"{filename}.py")
-    initPath = os.path.join(appPath, formsPath, "__init__.py")
 
     form = open(fullpath, "w+")
     form.write(f'''from flaskFormRequest import FormRequest
@@ -24,7 +23,3 @@ class {name}(FormRequest):
         return {{}}
 ''')
     form.close()
-
-    init = open(initPath, "a")
-    init.write(f"from .{filename} import {name}\n")
-    init.close()

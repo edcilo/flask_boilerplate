@@ -12,7 +12,6 @@ def makemiddleware(name):
     middlewaresPath = "ms/middlewares"
     filename = f"{name[0].lower()}{name[1:]}"
     fullpath = os.path.join(appPath, middlewaresPath, f"{filename}.py")
-    initPath = os.path.join(appPath, middlewaresPath, "__init__.py")
 
     controller = open(fullpath, "w+")
     controller.write(f'''from flask import abort
@@ -24,7 +23,3 @@ class {name}(Middleware):
         return True
     ''')
     controller.close()
-
-    # init = open(initPath, "a")
-    # init.write(f"from .{filename} import {name}\n")
-    # init.close()

@@ -13,7 +13,6 @@ def makemodel(name):
     modelsPath = 'ms/models'
     filename = f"{name[0].lower()}{name[1:]}"
     fullpath = os.path.join(appPath, modelsPath, f"{filename}.py")
-    initPath = os.path.join(appPath, modelsPath, '__init__.py')
     tableName = re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
 
     model = open(fullpath, 'w+')
@@ -44,7 +43,3 @@ class {name}(db.Model):
         return f"<{name} {{self.id}}>"
     ''')
     model.close()
-
-    init = open(initPath, "a")
-    init.write(f"from .{filename} import {name}\n")
-    init.close()
