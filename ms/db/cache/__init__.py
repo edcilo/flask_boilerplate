@@ -18,22 +18,27 @@ class Cache:
             db=self.config.get("DATABASE")
         )
 
-    def set(self, key, value):
+    def set(self, key, value, exp=None):
         data = json.dumps({
             "data": value,
             "key": key,
-            "created_at": epoch_now()
+            "created_at": epoch_now(),
+            "exp": exp
         })
-        return self.conn.set(key, data)
+        return self.conn.set(key, data, ex=exp)
 
     def get(self, key):
         data = self.get_raw(key)
-        return data.get("data")
+        return None if data is None else data.get("data")
 
     def get_raw(self, key):
         data = self.conn.get(key)
-        data = json.loads(data)
+        if data is not None:
+            data = json.loads(data)
         return data
 
     def exists(self, key):
-        return self.conn.exists(key)
+        return self.conn.exists(key) > 0
+
+    def ping(self):
+        return self.conn.ping()
