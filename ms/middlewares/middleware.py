@@ -13,7 +13,8 @@ def middleware(middlewareCls, *dargs, **dkwargs):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            middlewareCls(*dargs, **dkwargs).handler(request)
+            mid = middlewareCls(*dargs, **dkwargs)
+            mid.handler(request)
             return f(*args, **kwargs)
         return wrapper
     return decorator
