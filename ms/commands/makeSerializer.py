@@ -15,7 +15,7 @@ def makeserializer(name):
     fullpath = os.path.join(appPath, serializerPath, f"{filename}.py")
 
     seeder = open(fullpath, 'w+')
-    seeder.write(f'''from .serializer import Serializer
+    seeder.write(f'''from ms.serializers import Serializer
 
 
 class {name}(Serializer):
@@ -24,3 +24,4 @@ class {name}(Serializer):
     }}
 ''')
     seeder.close()
+

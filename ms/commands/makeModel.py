@@ -41,5 +41,5 @@ class {name}(db.Model):
 
     def __repr__(self):
         return f"<{name} {{self.id}}>"
-    ''')
+''')
     model.close()

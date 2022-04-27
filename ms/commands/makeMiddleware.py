@@ -21,5 +21,5 @@ from .middleware import Middleware
 class {name}(Middleware):
     def handler(self, request):
         return True
-    ''')
+''')
     controller.close()
