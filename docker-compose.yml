@@ -25,6 +25,12 @@ services:
     networks:
     - flaskNet
 
+  redis:
+    container_name: redis
+    image: redis:6-alpine
+    networks:
+      - flaskNet
+
 networks:
   flaskNet:
     driver: "bridge"
