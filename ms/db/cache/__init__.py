@@ -37,6 +37,9 @@ class Cache:
             data = json.loads(data)
         return data
 
+    def delete(self, key):
+        return self.conn.delete(key)
+
     def exists(self, key):
         return self.conn.exists(key) > 0
 
