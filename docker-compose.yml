@@ -10,6 +10,9 @@ services:
     - ./:/app
     environment:
     - FLASK_ENV=development
+    depends_on:
+    - psql_
+    - redis_
     networks:
     - flaskNet
 
@@ -18,6 +21,8 @@ services:
     image: postgres
     ports:
     - 5432:5432
+    volumes:
+    - flaskDbVol:/var/lib/postgresql/data
     environment:
     - POSTGRES_PASSWORD=secret
     - POSTGRES_USER=postgres
@@ -25,12 +30,19 @@ services:
     networks:
     - flaskNet
 
-  redis:
-    container_name: redis
+  redis_:
+    container_name: redis_
     image: redis:6-alpine
+    ports:
+    - 6379:6379
     networks:
       - flaskNet
 
 networks:
   flaskNet:
     driver: "bridge"
+
+
+volumes:
+  flaskDbVol:
+    driver: local

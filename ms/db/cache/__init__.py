@@ -6,6 +6,7 @@ from ms.helpers.time import epoch_now
 
 class Cache:
     def __init__(self):
+        self.chunk_size = 5000
         self.config = app.config.get("REDIS", dict())
         self.conn = self.connection()
 
@@ -39,6 +40,17 @@ class Cache:
 
     def delete(self, key):
         return self.conn.delete(key)
+
+    def truncate(self):
+        cursor = '0'
+        while cursor != 0:
+            cursor, keys = self.conn.scan(
+                cursor=cursor,
+                match="*",
+                count=self.chunk_size)
+            if keys:
+                self.conn.delete(*keys)
+        return True
 
     def exists(self, key):
         return self.conn.exists(key) > 0

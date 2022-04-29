@@ -6,6 +6,9 @@ echo $(date '+%F %T.%3N %Z') "[flask] INFO: running start.sh"
 
 env=${FLASK_ENV:-development}
 
+echo $(date '+%F %T.%3N %Z') "[flask] INFO: start cron"
+/usr/sbin/crond -b -l 8
+
 if [ $env = "production" ]
 then
     echo $(date '+%F %T.%3N %Z') "[flask] INFO: running production environment"
