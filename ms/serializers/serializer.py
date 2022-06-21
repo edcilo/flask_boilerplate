@@ -6,7 +6,11 @@ from flask_sqlalchemy import Model
 class Serializer:
     response = dict()
 
-    def __init__(self, model, collection=False, paginate=False):
+    def __init__(
+            self,
+            model,
+            collection: bool = False,
+            paginate: bool = False):
         self.__data = None
         self.__original = model
         self.__model = model.items if paginate else model

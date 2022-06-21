@@ -19,7 +19,7 @@ def makerepository(name):
 
 
 class {name}(Repository):
-    def set_model(self):
+    def get_model(self):
         pass
 ''')
     model.close()
