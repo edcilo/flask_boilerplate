@@ -36,7 +36,7 @@ class {name}(db.Model):
         nullable=False)
 
     def __init__(self, data=None):
-        if not data is None:
+        if data is not None:
             self.setAttrs(data)
 
     def __repr__(self):
