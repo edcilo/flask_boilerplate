@@ -1,6 +1,7 @@
 import click
 import os
 from flask.cli import with_appcontext
+from .make import Make
 
 
 @click.command(name='make:middleware',
@@ -8,18 +9,14 @@ from flask.cli import with_appcontext
 @click.option("-n", "--name", required=True, help="The name of the class")
 @with_appcontext
 def makemiddleware(name):
-    appPath = os.path.realpath("")
-    middlewaresPath = "ms/middlewares"
-    filename = f"{name[0].lower()}{name[1:]}"
-    fullpath = os.path.join(appPath, middlewaresPath, f"{filename}.py")
+    make = Make(
+        entity_path="ms/middlewares",
+        template="middlewareTemplate.py"
+    )
 
-    controller = open(fullpath, "w+")
-    controller.write(f'''from flask import abort
-from .middleware import Middleware
+    make.set_entityname(name)
 
+    if make.check():
+        raise click.BadParameter(f"The file {make.filename} already exists")
 
-class {name}(Middleware):
-    def handler(self, request):
-        return True
-''')
-    controller.close()
+    make.make(name)

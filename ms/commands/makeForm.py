@@ -1,6 +1,6 @@
 import click
-import os
 from flask.cli import with_appcontext
+from .make import Make
 
 
 @click.command(name='make:form',
@@ -8,18 +8,14 @@ from flask.cli import with_appcontext
 @click.option("-n", "--name", required=True, help="The name of the form")
 @with_appcontext
 def makeform(name):
-    appPath = os.path.realpath("")
-    formsPath = "ms/forms"
-    filename = f"{name[0].lower()}{name[1:]}"
-    fullpath = os.path.join(appPath, formsPath, f"{filename}.py")
+    make = Make(
+        entity_path="ms/forms",
+        template="formTemplate.py"
+    )
 
-    form = open(fullpath, "w+")
-    form.write(f'''from flaskFormRequest import FormRequest
-from flaskFormRequest.validators import Required
+    make.set_entityname(name)
 
+    if make.check():
+        raise click.BadParameter(f"The file {make.filename} already exists")
 
-class {name}(FormRequest):
-    def rules(self):
-        return {{}}
-''')
-    form.close()
+    make.make(name)

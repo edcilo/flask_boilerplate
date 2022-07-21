@@ -1,7 +1,6 @@
 import click
-import os
-import re
 from flask.cli import with_appcontext
+from .make import Make
 
 
 @click.command(name='make:repository',
@@ -9,17 +8,14 @@ from flask.cli import with_appcontext
 @click.option('-n', '--name', required=True, help='The name of the class')
 @with_appcontext
 def makerepository(name):
-    appPath = os.path.realpath('')
-    modelsPath = 'ms/repositories'
-    filename = f"{name[0].lower()}{name[1:]}"
-    fullpath = os.path.join(appPath, modelsPath, f"{filename}.py")
+    make = Make(
+        entity_path="ms/repositories",
+        template="repositoryTemplate.py"
+    )
 
-    model = open(fullpath, 'w+')
-    model.write(f'''from .repository import Repository
+    make.set_entityname(name)
 
+    if make.check():
+        raise click.BadParameter(f"The file {make.filename} already exists")
 
-class {name}(Repository):
-    def get_model(self):
-        pass
-''')
-    model.close()
+    make.make(name)

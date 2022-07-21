@@ -1,9 +1,14 @@
+from flask import request
+
+
 class BadMethodCallException(Exception):
     def __init__(self, message="", *args, **kwargs):
         Exception.__init__(self, message, *args, **kwargs)
 
 
 class Controller:
+    request = request
+
     @classmethod
     def action(cls, method, *args, **kwargs):
         try:

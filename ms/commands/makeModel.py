@@ -1,7 +1,26 @@
 import click
-import os
 import re
 from flask.cli import with_appcontext
+from .make import Make
+
+
+class MakeModel(Make):
+    @property
+    def placeholders(self):
+        return [
+            {
+                'placeholder': '<CLASSNAME>',
+                'value': 'entityName',
+            },
+            {
+                'placeholder': '<TABLENAME>',
+                'value': 'tableName',
+            }
+        ]
+
+    @property
+    def tableName(self):
+        return re.sub(r'(?<!^)(?=[A-Z])', '_', self.entityName).lower()
 
 
 @click.command(name='make:model',
@@ -9,37 +28,14 @@ from flask.cli import with_appcontext
 @click.option('-n', '--name', required=True, help='The name of the class')
 @with_appcontext
 def makemodel(name):
-    appPath = os.path.realpath('')
-    modelsPath = 'ms/models'
-    filename = f"{name[0].lower()}{name[1:]}"
-    fullpath = os.path.join(appPath, modelsPath, f"{filename}.py")
-    tableName = re.sub(r'(?<!^)(?=[A-Z])', '_', name).lower()
+    make = MakeModel(
+        entity_path="ms/models",
+        template="modelTemplate.py"
+    )
 
-    model = open(fullpath, 'w+')
-    model.write(f'''import datetime
-import uuid
-from ms.db import db
+    make.set_entityname(name)
 
+    if make.check():
+        raise click.BadParameter(f"The file {make.filename} already exists")
 
-class {name}(db.Model):
-    __tablename__ = '{tableName}'
-
-    _fillable = []
-
-    id = db.Column(
-        db.String(length=36),
-        default=lambda: str(uuid.uuid4()),
-        primary_key=True)
-    created_at = db.Column(
-        db.DateTime,
-        default=datetime.datetime.utcnow,
-        nullable=False)
-
-    def __init__(self, data=None):
-        if data is not None:
-            self.setAttrs(data)
-
-    def __repr__(self):
-        return f"<{name} {{self.id}}>"
-''')
-    model.close()
+    make.make(name)
