@@ -1,6 +1,6 @@
 import abc
 from sqlalchemy import or_
-from ms.db import db, Model
+from ms.db import db
 
 
 class Repository(abc.ABC):
