@@ -1,6 +1,7 @@
 import abc
 from sqlalchemy import or_
 from ms.db import db
+from ms.helpers import time
 
 
 class Repository(abc.ABC):
@@ -47,25 +48,32 @@ class Repository(abc.ABC):
         q = q.order_by(order_by())
         return q.paginate(page, per_page=per_page) if paginate else q.all()
 
-    def find(self, id, fail=True):
+    def find(self, id, fail=True, with_deleted=False):
         if isinstance(id, self._model):
             return id
-        q = self._model.query.filter_by(id=id)
+        filters = {'id': id}
+        if hasattr(self._model, 'deleted_at') and not with_deleted:
+            filters['deleted_at'] = None
+        q = self._model.query.filter_by(**filters)
         return q.first_or_404() if fail else q.first()
 
-    def find_by_attr(self, column, value, fail=True):
+    def find_by_attr(self, column, value, fail=True, with_deleted=False):
         q = self._model.query.filter_by(**{column: value})
+        if hasattr(self._model, 'deleted_at') and not with_deleted:
+            q = q.filter(self._model.deleted_at.is_(None))
         return q.first_or_404() if fail else q.first()
 
-    def find_optional(self, filter, fail=True):
+    def find_optional(self, filter, fail=True, with_deleted=False):
         filters = [
             getattr(self._model, key) == val for key,
             val in filter.items()]
         q = self._model.query.filter(or_(*filters))
+        if hasattr(self._model, 'deleted_at') and not with_deleted:
+            q = q.filter(self._model.deleted_at.is_(None))
         return q.first_or_404() if fail else q.first()
 
-    def update(self, id, data, fail=True):
-        model = self.find(id, fail=fail)
+    def update(self, id, data, fail=True, with_deleted=False):
+        model = self.find(id, fail=fail, with_deleted=with_deleted)
         if model is not None:
             model.update(data)
             self.db_save(model)
