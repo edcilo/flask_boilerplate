@@ -61,6 +61,24 @@ class Repository(abc.ABC):
             self.db_save(model)
         return model
 
+    def soft_delete(self, id, fail=True):
+        model = self.find(id, fail=fail)
+        if not hasattr(model, 'deleted_at'):
+            raise Exception('Model does not have a deleted_at column')
+        if model is not None:
+            model.deleted_at = time.now()
+            self.db_save(model)
+        return model
+
+    def restore(self, id, fail=True):
+        model = self.find(id, fail=fail)
+        if not hasattr(model, 'deleted_at'):
+            raise Exception('Model does not have a deleted_at column')
+        if model is not None:
+            model.deleted_at = None
+            self.db_save(model)
+        return model
+
     def delete(self, id, fail=True):
         model = self.find(id, fail=fail)
         if model is not None:
