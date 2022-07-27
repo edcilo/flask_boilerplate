@@ -32,11 +32,18 @@ class Repository(abc.ABC):
             filter=lambda q: q,
             paginate=False,
             page=1,
-            per_page=15):
+            per_page=15,
+            deleted=False,
+            with_deleted=False):
         column = getattr(self._model, order_column)
         order_by = getattr(column, order)
         q = self._model.query
         q = filter(q)
+        if hasattr(self._model, 'deleted_at'):
+            if deleted:
+                q = q.filter(self._model.deleted_at.is_not(None))
+            elif not with_deleted:
+                q = q.filter(self._model.deleted_at.is_(None))
         q = q.order_by(order_by())
         return q.paginate(page, per_page=per_page) if paginate else q.all()
 
