@@ -29,12 +29,15 @@ class Repository(abc.ABC):
             self,
             order_column='created_at',
             order='desc',
+            filter=lambda q: q,
             paginate=False,
             page=1,
             per_page=15):
         column = getattr(self._model, order_column)
         order_by = getattr(column, order)
-        q = self._model.query.order_by(order_by())
+        q = self._model.query
+        q = filter(q)
+        q = q.order_by(order_by())
         return q.paginate(page, per_page=per_page) if paginate else q.all()
 
     def find(self, id, fail=True):
