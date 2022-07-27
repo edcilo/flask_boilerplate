@@ -38,6 +38,8 @@ class Repository(abc.ABC):
         return q.paginate(page, per_page=per_page) if paginate else q.all()
 
     def find(self, id, fail=True):
+        if isinstance(id, self._model):
+            return id
         q = self._model.query.filter_by(id=id)
         return q.first_or_404() if fail else q.first()
 
